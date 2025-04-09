@@ -6,10 +6,11 @@ class categoria_controll {
     const categorias = await obj_categoria.getAll();
     res.json(categorias);
   };
+
   static createCategoria = async (req, res) => {
     try {
       const { nombre, descripcion } = req.body;
-      const obj_categoria = new categoria();
+      const obj_categoria = new Categoria();
       const categoria = await obj_categoria.create(nombre, descripcion);
       res.status(500).json();
       json(categoria);
@@ -38,7 +39,18 @@ class categoria_controll {
       const categoria = await obj_categoria.patch(nombre, descripcion, id);
       res.json(categoria);
     } catch (error) {
-      res.json(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  static deleteCategoria = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const obj_categoria = new Categoria();
+      const categoria = await obj_categoria.delete(id);
+      res.json(categoria);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   };
 }

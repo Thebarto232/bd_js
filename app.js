@@ -1,6 +1,7 @@
 import express from "express"; /**importamos  */
 import bodyParser from "body-parser";
 import routerCategorias from "./routes/categorias.js";
+import routerProductos from "./routes/productos.js";
 const app = express();
 
 app.use(bodyParser.json()); /**metodo use (dependenia accede al body) */
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true })); /** */
 //   console.log(req.body);
 // });
 app.use("/categorias", routerCategorias);
+app.use("/productos", routerProductos);
 app.listen(3000, () => {
   /**puerto 3000 */
   console.log("hola mundo");

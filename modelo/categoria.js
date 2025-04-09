@@ -50,7 +50,7 @@ export class Categoria {
   async create(nombre, descripcion) {
     try {
       const [result] = await conetion.query(
-        "INSERT INT categorias(nombre,descripcion)VALUES(?,?)",
+        "INSERT INTO categorias(nombre,descripcion)VALUES(?,?)",
         [nombre, descripcion]
       );
       return {
@@ -99,6 +99,34 @@ export class Categoria {
       };
     } catch (error) {
       throw new Error("errroca cateogoria");
+    }
+  }
+  async relacionado_productos(id) {
+    const [result] = await conetion.query(
+      `SELECT * FROM productos WHERE categorias_id = ?;`,
+      [id]
+    );
+    return result.length > 0;
+  }
+
+  async delete(id) {
+    try {
+      const relacionado = await this.relacionado_productos(id);
+      if (relacionado) {
+        throw new Error(
+          "no se puede ilimar por que la categoira esta relcionada con prodcutos"
+        );
+      }
+      const [result] = await conetion.query(
+        `delete from categorias WHERE id = ?`,
+        [id]
+      );
+      if (result.affectedRows == 0) {
+        throw new Error("categoria no encontrada");
+      }
+      return { error: "eliminmado correctamente" };
+    } catch (error) {
+      throw new Error(error.message || "error al eliminar la categoria");
     }
   }
 }
